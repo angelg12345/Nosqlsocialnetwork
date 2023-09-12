@@ -1,4 +1,5 @@
 const Thought = require('../models/Thought')
+const Reaction = require('../models/Reaction')
 
 const thoughtController = {
     getAllThoughts: async (req, res) => {
@@ -48,12 +49,13 @@ const thoughtController = {
   
     createReaction: async (req, res) => {
       try {
+        const reaction = await Reaction.create(req.body); // Create the reaction
         const thought = await Thought.findByIdAndUpdate(
           req.params.thoughtId,
-          { $push: { reactions: req.body } },
+          { $push: { reactions: reaction._id } }, // Add the reaction ID to the thought
           { new: true }
         );
-        res.json(thought);
+        res.json(reaction); // Send back just the created reaction
       } catch (error) {
         res.status(400).json({ message: error.message });
       }
@@ -63,7 +65,7 @@ const thoughtController = {
       try {
         const thought = await Thought.findByIdAndUpdate(
           req.params.thoughtId,
-          { $pull: { reactions: { reactionId: req.body.reactionId } } },
+          { $pull: { reactions: { _id: req.body.reactionId } } },
           { new: true }
         );
         res.json(thought);
@@ -71,6 +73,7 @@ const thoughtController = {
         res.status(400).json({ message: error.message });
       }
     }
+    
   };
   
   module.exports = thoughtController;

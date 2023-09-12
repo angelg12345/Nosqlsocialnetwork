@@ -59,7 +59,8 @@ const userController = {
           const user = await User.findByIdAndUpdate(
             req.params.userId,
             { $push: { friends: req.params.friendId } },
-            { new: true }
+            { new: true },
+            res.json({ message: 'successfully added friend'})
           );
           res.json(user);
         } catch (error) {
