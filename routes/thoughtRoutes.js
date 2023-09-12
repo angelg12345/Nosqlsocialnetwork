@@ -7,7 +7,7 @@ const {
     deleteThought,
     createReaction,
     deleteReaction
-} = require('../controllers')
+} = require('../controllers/thoughtController')
 
 const router = express.Router();
 
